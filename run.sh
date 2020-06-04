@@ -188,32 +188,35 @@ case $VPN_SHA2_TRUNCBUG in
     ;;
 esac
 
-# Create IPsec config
+# Create IPsec config for 2 Tunnel AWS VPG
 cat > /etc/ipsec.conf <<EOF
 version 2.0
 
 config setup
-  virtual-private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:!$L2TP_NET,%v4:!$XAUTH_NET
-  protostack=netkey
-  interfaces=%defaultroute
-  uniqueids=no
+  #uniqueids=no
+  #charondebug="cfg 2, dmn 2, ike 2, net 0"
 
-conn shared
-  left=%defaultroute
-  leftid=$PUBLIC_IP
-  right=%any
-  encapsulation=yes
+
+conn %default
+  esp=aes128-sha1-modp1024
+  ikelifetime=28800s
+  keylife=3600s
+  rekeymargin=3m
+  keyingtries=%forever
+  keyexchange=ikev1
+  mobike=no
+  left=%any
+  leftsubnet=$LOCAL_CIDR
+  dpdaction=restart
+  auto=start
   authby=secret
-  pfs=no
-  rekey=no
-  keyingtries=5
-  dpddelay=30
-  dpdtimeout=120
-  dpdaction=clear
-  ikev2=never
-  ike=aes256-sha2,aes128-sha2,aes256-sha1,aes128-sha1,aes256-sha2;modp1024,aes128-sha1;modp1024
-  phase2alg=aes_gcm-null,aes128-sha1,aes256-sha1,aes256-sha2_512,aes128-sha2,aes256-sha2
-  sha2-truncbug=$SHA2_TRUNCBUG
+  rightsubnet=$AWS_CIDR
+
+conn DatastoreTunnel1
+  right=$AWS_TUNNEL1_IP
+
+conn DatastoreTunnel2
+  right=$AWS_TUNNEL2_IP
 
 conn l2tp-psk
   auto=add
@@ -247,7 +250,9 @@ fi
 
 # Specify IPsec PSK
 cat > /etc/ipsec.secrets <<EOF
-%any  %any  : PSK "$VPN_IPSEC_PSK"
+$AWS_TUNNEL1_IP : PSK "$VPN_IPSEC_PSK"
+$AWS_TUNNEL2_IP : PSK "$VPN_IPSEC_PSK"
+
 EOF
 
 # Create xl2tpd config
@@ -390,6 +395,15 @@ Server IP: $PUBLIC_IP
 IPsec PSK: $VPN_IPSEC_PSK
 Username: $VPN_USER
 Password: $VPN_PASSWORD
+
+The following AWS VPG Details are being used for the VPN Server
+AWS CIDR Range: $AWS_CIDR
+Local CIDR Range: $LOCAL_CIDR
+
+AWS Tunnel 1 IP: $AWS_TUNNEL1_IP
+AWS Tunnel 2 IP: $AWS_TUNNEL2_IP
+
+
 EOF
 
 if [ -n "$VPN_ADDL_USERS" ] && [ -n "$VPN_ADDL_PASSWORDS" ]; then
