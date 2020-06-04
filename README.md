@@ -1,5 +1,29 @@
 # IPsec VPN Server on Docker
 
+## References
+
+https://geekdudes.wordpress.com/2019/01/30/creating-site-to-site-vpn-between-strongswan-and-amazon-aws-virtual-private-gateway/
+
+https://geekdudes.wordpress.com/2019/02/01/creating-site-to-site-vpn-between-strongswan-and-amazon-aws-virtual-private-gateway-using-bgp-routing-protocol/
+
+https://medium.com/@tatianaensslin/how-to-create-a-free-personal-vpn-in-the-cloud-using-ec2-openvpn-626c40e96dab
+
+https://www.psychz.net/client/kb/en/quagga-routing--install-configure-and-setup-bgp.html
+
+https://www.nongnu.org/quagga/docs/quagga.html#Sample-Config-File
+
+https://github.com/npiper/docker-ipsec-vpn-server/tree/e9b1b9b277cf14efd051381b4c510b05654c342e
+
+https://hub.docker.com/repository/docker/npiper/docker-ipsec-vpn-server
+
+https://docs.aws.amazon.com/vpn/latest/s2svpn/Examples.html
+
+https://github.com/andrewpuch/multi_region_vpn_connection
+https://www.youtube.com/watch?v=AF3bGRqnKfk
+
+
+
+
 [![Build Status](https://img.shields.io/travis/hwdsl2/docker-ipsec-vpn-server.svg?maxAge=1200)](https://travis-ci.org/hwdsl2/docker-ipsec-vpn-server) [![GitHub Stars](https://img.shields.io/github/stars/hwdsl2/docker-ipsec-vpn-server.svg?maxAge=86400)](https://github.com/hwdsl2/docker-ipsec-vpn-server/stargazers) [![Docker Stars](https://img.shields.io/docker/stars/hwdsl2/ipsec-vpn-server.svg?maxAge=86400)](https://hub.docker.com/r/hwdsl2/ipsec-vpn-server/) [![Docker Pulls](https://img.shields.io/docker/pulls/hwdsl2/ipsec-vpn-server.svg?maxAge=86400)](https://hub.docker.com/r/hwdsl2/ipsec-vpn-server/)
 
 Docker image to run an IPsec VPN server, with both `IPsec/L2TP` and `Cisco IPsec`.
